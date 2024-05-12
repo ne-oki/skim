@@ -84,19 +84,6 @@ impl ColorTheme {
         }
     }
 
-    fn default() -> Self {
-        ColorTheme {
-            normal_effect:        Effect::DIM,
-            matched:              Color::CYAN,
-            current_effect:       Effect::BOLD,
-            current_match:        Color::CYAN,
-            info:                Color::YELLOW,
-            
-            cursor:               Color::GREEN,
-            ..ColorTheme::empty()
-        }
-    }
-
     #[allow(clippy::wildcard_in_or_patterns)]
     fn from_options(color: &str) -> Self {
         let mut theme = ColorTheme::default();
@@ -232,6 +219,21 @@ impl ColorTheme {
             fg: self.border,
             bg: self.bg,
             effect: Effect::empty(),
+        }
+    }
+}
+
+impl Default for ColorTheme {
+    fn default() -> Self {
+        ColorTheme {
+            normal_effect: Effect::DIM,
+            matched: Color::CYAN,
+            current_effect: Effect::BOLD,
+            current_match: Color::CYAN,
+            info: Color::YELLOW,
+
+            cursor: Color::GREEN,
+            ..ColorTheme::empty()
         }
     }
 }

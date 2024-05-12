@@ -51,6 +51,7 @@ pub struct Selection {
     multi_selection: bool,
     reverse: bool,
     no_hscroll: bool,
+    cursor_label: String,
     theme: Arc<ColorTheme>,
 
     // Pre-selection will be performed the first time an item was seen by Selection.
@@ -75,6 +76,7 @@ impl Selection {
             multi_selection: false,
             reverse: false,
             no_hscroll: false,
+            cursor_label: ">".to_string(),
             theme: Arc::new(*DEFAULT_THEME),
             latest_select_run_num: 0,
             pre_selected_watermark: 0,
@@ -116,6 +118,10 @@ impl Selection {
 
         if !options.skip_to_pattern.is_empty() {
             self.skip_to_pattern = Regex::new(options.skip_to_pattern).ok();
+        }
+
+        if let Some(cursor) = options.cursor {
+            self.cursor_label = cursor.to_string();
         }
 
         self.keep_right = options.keep_right;
@@ -546,7 +552,11 @@ impl Draw for Selection {
             };
 
             // print the cursor label
-            let label = if line_cursor == self.line_cursor { "❯" } else { " " };
+            let label = if line_cursor == self.line_cursor {
+                self.cursor_label.as_str()
+            } else {
+                " "
+            };
             let _next_col = canvas.print_with_attr(line_no, 0, label, self.theme.cursor()).unwrap();
 
             let item = self
