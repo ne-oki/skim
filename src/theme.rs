@@ -4,7 +4,7 @@ use tuikit::prelude::*;
 
 #[rustfmt::skip]
 lazy_static! {
-    pub static ref DEFAULT_THEME:  ColorTheme = ColorTheme::dark256();
+    pub static ref DEFAULT_THEME:  ColorTheme = ColorTheme::default();
 }
 
 /// The color scheme of skim's UI
@@ -53,10 +53,10 @@ impl ColorTheme {
         if let Some(color) = options.color {
             ColorTheme::from_options(color)
         } else {
-            ColorTheme::dark256()
+            ColorTheme::default()
         }
     }
-
+    
     fn empty() -> Self {
         ColorTheme {
             fg:                   Color::Default,
@@ -84,107 +84,24 @@ impl ColorTheme {
         }
     }
 
-    fn bw() -> Self {
+    fn default() -> Self {
         ColorTheme {
-            matched_effect:       Effect::UNDERLINE,
-            current_effect:       Effect::REVERSE,
-            current_match_effect: Effect::UNDERLINE | Effect::REVERSE,
-            ..ColorTheme::empty()
-        }
-    }
-
-    fn default16() -> Self {
-        ColorTheme {
-            matched:          Color::GREEN,
-            matched_bg:       Color::BLACK,
-            current:          Color::YELLOW,
-            current_bg:       Color::BLACK,
-            current_match:    Color::GREEN,
-            current_match_bg: Color::BLACK,
-            spinner:          Color::GREEN,
-            info:             Color::WHITE,
-            prompt:           Color::BLUE,
-            cursor:           Color::RED,
-            selected:         Color::MAGENTA,
-            header:           Color::CYAN,
-            border:           Color::LIGHT_BLACK,
-            ..ColorTheme::empty()
-        }
-    }
-
-    fn dark256() -> Self {
-        ColorTheme {
-            matched:          Color::AnsiValue(108),
-            matched_bg:       Color::AnsiValue(0),
-            current:          Color::AnsiValue(254),
-            current_bg:       Color::AnsiValue(236),
-            current_match:    Color::AnsiValue(151),
-            current_match_bg: Color::AnsiValue(236),
-            spinner:          Color::AnsiValue(148),
-            info:             Color::AnsiValue(144),
-            prompt:           Color::AnsiValue(110),
-            cursor:           Color::AnsiValue(161),
-            selected:         Color::AnsiValue(168),
-            header:           Color::AnsiValue(109),
-            border:           Color::AnsiValue(59),
-            ..ColorTheme::empty()
-        }
-    }
-
-    fn molokai256() -> Self {
-        ColorTheme {
-            matched:          Color::AnsiValue(234),
-            matched_bg:       Color::AnsiValue(186),
-            current:          Color::AnsiValue(254),
-            current_bg:       Color::AnsiValue(236),
-            current_match:    Color::AnsiValue(234),
-            current_match_bg: Color::AnsiValue(186),
-            spinner:          Color::AnsiValue(148),
-            info:             Color::AnsiValue(144),
-            prompt:           Color::AnsiValue(110),
-            cursor:           Color::AnsiValue(161),
-            selected:         Color::AnsiValue(168),
-            header:           Color::AnsiValue(109),
-            border:           Color::AnsiValue(59),
-            ..ColorTheme::empty()
-        }
-    }
-
-    fn light256() -> Self {
-        ColorTheme {
-            matched:          Color::AnsiValue(0),
-            matched_bg:       Color::AnsiValue(220),
-            current:          Color::AnsiValue(237),
-            current_bg:       Color::AnsiValue(251),
-            current_match:    Color::AnsiValue(66),
-            current_match_bg: Color::AnsiValue(251),
-            spinner:          Color::AnsiValue(65),
-            info:             Color::AnsiValue(101),
-            prompt:           Color::AnsiValue(25),
-            cursor:           Color::AnsiValue(161),
-            selected:         Color::AnsiValue(168),
-            header:           Color::AnsiValue(31),
-            border:           Color::AnsiValue(145),
+            normal_effect:        Effect::DIM,
+            matched:              Color::CYAN,
+            current_effect:       Effect::BOLD,
+            current_match:        Color::CYAN,
+            info:                Color::YELLOW,
+            
+            cursor:               Color::GREEN,
             ..ColorTheme::empty()
         }
     }
 
     #[allow(clippy::wildcard_in_or_patterns)]
     fn from_options(color: &str) -> Self {
-        let mut theme = ColorTheme::dark256();
+        let mut theme = ColorTheme::default();
         for pair in color.split(',') {
             let color: Vec<&str> = pair.split(':').collect();
-            if color.len() < 2 {
-                theme = match color[0] {
-                    "molokai"  => ColorTheme::molokai256(),
-                    "light"    => ColorTheme::light256(),
-                    "16"       => ColorTheme::default16(),
-                    "bw"       => ColorTheme::bw(),
-                    "empty"    => ColorTheme::empty(),
-                    "dark" | "default" | _ => ColorTheme::dark256(),
-                };
-                continue;
-            }
 
             let new_color = if color[1].len() == 7 {
                 // 256 color
