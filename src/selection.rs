@@ -546,7 +546,7 @@ impl Draw for Selection {
             };
 
             // print the cursor label
-            let label = if line_cursor == self.line_cursor { ">" } else { " " };
+            let label = if line_cursor == self.line_cursor { "❯" } else { " " };
             let _next_col = canvas.print_with_attr(line_no, 0, label, self.theme.cursor()).unwrap();
 
             let item = self

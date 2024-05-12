@@ -64,7 +64,7 @@ impl<'a> Default for SkimOptions<'a> {
         Self {
             bind: vec![],
             multi: false,
-            prompt: Some("> "),
+            prompt: Some("❯ "),
             cmd_prompt: Some("c> "),
             expect: None,
             tac: false,
